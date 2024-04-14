@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Australian News on Social and Political Issues</title>
+</head>
+<body>
+    <h2>Articles from Guardian API</h2>
+    <div id="articles-container">
+        <!-- Articles will be displayed here -->
+    </div>
+
+    <script>
+        // Make a GET request to the server
+        fetch('/polls/articles/')
+            .then(response => response.json())
+            .then(data => {
+                // Display the articles in the HTML page
+                const articlesContainer = document.getElementById('articles-container');
+                data.articles.forEach(article => {
+                    const articleElement = document.createElement('div');
+                    articleElement.innerHTML = `
+                        <h3>${article.fields.headline}</h3>
+                        <p>${article.fields.trailText}</p>
+                        <a href="${article.webUrl}" target="_blank">Read more</a>
+                    `;
+                    articlesContainer.appendChild(articleElement);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching articles:', error);
+            });
+    </script>
+</body>
+</html>
