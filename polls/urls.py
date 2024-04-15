@@ -1,9 +1,8 @@
 from django.urls import path
-from .views import home, index, fetch_articles
+from .views import home, index, polls
 
 urlpatterns = [
     path('', home, name='home'),
     path('polls/', index, name='polls_index'),
-    path('fetch-articles/', fetch_articles, name='fetch_articles'),
+    path('fetch-articles/', polls, name='fetch_polls'),
 ]
-
