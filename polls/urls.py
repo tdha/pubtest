@@ -6,3 +6,4 @@ urlpatterns = [
     path('polls/', index, name='polls_index'),
     path('fetch-articles/', fetch_articles, name='fetch_articles'),
 ]
+
