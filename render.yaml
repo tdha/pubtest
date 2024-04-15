@@ -1,0 +1,22 @@
+databases:
+  - name: pubtestdb
+    plan: free
+    databaseName: pubtest
+    user: pubtest
+
+services:
+  - type: web
+    plan: free
+    name: pubtest
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "python3 -m gunicorn pubtest.asgi:application -k uvicorn.workers.UvicornWorker"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: pubtestdb
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
