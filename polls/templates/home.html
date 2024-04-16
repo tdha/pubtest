@@ -1,40 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Australian News on Social and Political Issues</title>
-</head>
-<body>
-    <h2>Hello. Home page.</h2>
-    <!-- <div id="articles-container">
-    </div> -->
+{% extends 'base.html' %}
+{% block content %}
 
-    <!-- <script>
-        const guardianApiKey = 'GUARDIAN_API_KEY'; // NOTE: It's insecure to place API keys directly in front-end code.
-        const url = `https://content.guardianapis.com/search?order-by=newest&section=australia-news&page-size=3&show-fields=headline,trailText,body&api-key=${GUARDIAN_API_KEY}`;
+<h1 class="mb-5 quattrocento-bold">PubTest</h1>
 
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                const articles = data.response.results;
-                const articlesContainer = document.getElementById('articles-container');
-                articles.forEach(article => {
-                    const articleElement = document.createElement('div');
-                    articleElement.innerHTML = `
-                        <h3>${article.fields.headline}</h3>
-                        <p>${article.fields.trailText}</p>
-                        <a href="${article.webUrl}" target="_blank">Read more</a>
-                    `;
-                    articlesContainer.appendChild(articleElement);
-                });
-            })
-            .catch(error => {
-                console.error('Error fetching articles:', error);
-                const errorMessage = document.createElement('p');
-                errorMessage.textContent = 'Failed to fetch articles.';
-                document.getElementById('articles-container').appendChild(errorMessage);
-            });
-    </script> -->
-</body>
-</html>
+{% for temp in temps %}
+<div class="card mb-4" style="width: 32rem;">
+    <div class="card-header px-0 d-flex">
+        <strong class="ms-5 me-2">#id</strong> <em class="flex-grow-1">date</em> <span class="me-5">Results</span>
+    </div>
+    <div class="card-body px-5 pt-4 pb-4">
+        <h3 class="mb-4">{{ temp.question }}</h3>
+        <a href="#" class="btn btn-light me-3 quattrocento-bold response-no">No</a>
+        <a href="#" class="btn btn-light quattrocento-bold response-yes">Yes</a>
+        <p class="mt-4">{{ temp.summary }}<br>
+            <a href="#" class="card-link text-muted">Read the article</a>
+        </p>
+        
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}
