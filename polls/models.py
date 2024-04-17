@@ -1,12 +1,6 @@
 from django.db import models
 from datetime import date
 
-# ANSWERS = (
-#     ('U', 'Undecided'),
-#     ('Y', 'Yes'),
-#     ('N', 'No'),
-# )
-
 class Article(models.Model):
     web_url = models.CharField(max_length=255)
     headline = models.TextField()
@@ -15,11 +9,6 @@ class Article(models.Model):
     date = models.DateField(default=date.today)
     summary = models.TextField(blank=True)
     question = models.TextField(blank=True)
-    # answers = models.CharField(
-    #     max_length=1,
-    #     choices=ANSWERS,
-    #     default=ANSWERS[0][0]
-    # )
 
     def __str__(self):
         return f"{self.id}: {self.headline}"

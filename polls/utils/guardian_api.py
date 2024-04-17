@@ -2,6 +2,7 @@ import os
 import requests
 from django.utils import timezone
 from polls.models import Article
+from .gpt_api import generate_questions, save_generated_question
 
 def fetch_articles(request):
     guardian_api_key = os.getenv('GUARDIAN_API_KEY')
@@ -37,6 +38,10 @@ def fetch_articles(request):
                     "trail_text": new_article.trail_text,
                     "body": new_article.body,
                 })
+
+                article_id = new_article.id
+                summary, question = generate_questions(article_id, new_article.headline, new_article.trail_text, new_article.body)
+                save_generated_question(article_id, summary, question)
 
         return formatted_data
 
