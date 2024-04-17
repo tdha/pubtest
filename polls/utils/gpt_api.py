@@ -1,6 +1,8 @@
 import os
 from openai import OpenAI
 from dotenv import load_dotenv
+from django.utils import timezone
+from polls.models import Article
 
 load_dotenv("pubtest/.env")
 
@@ -30,7 +32,7 @@ def generate_questions(article_data):
         "Write a one line summary of the provided article (do not prefix i.e. remove 'summary'), then write a yes/no question (do not prefix i.e. remove 'question') that, once presented to the general population, will result in insightful demographic data.\n\n"
         "News article below:\n\n"
         f"Headline: {article_data['headline']}\n"
-        f"Trail Text: {article_data['trailText']}\n"
+        f"Trail Text: {article_data['trail_text']}\n"
         f"Body: {article_data['body']}"
     )
     try:
@@ -46,4 +48,29 @@ def generate_questions(article_data):
     except Exception as e:
         print(f"An error occurred while generating the question: {e}")
         return "I couldn't generate a question."
+
+def save_generated_question(article_id, article_data, summary):
+    try:
+        question = generate_questions(article_data)
+
+        new_article = Article(
+            guardian_article_id=article_id,
+            web_url=article_data['webUrl'],
+            headline=article_data['fields']['headline'],
+            trail_text=article_data['fields']['trailText'],
+            body=article_data['fields']['body'],
+            date=timezone.now(),
+            summary=summary,
+            question=question,
+        )
+        new_article.save()
+
+        return new_article
     
+    except Article.DoesNotExist:
+        print("Corresponding Guardian article not found.")
+        return None
+    
+    except Exception as e:
+        print(f"An error occurred while saving generated question: {e}")
+        return None

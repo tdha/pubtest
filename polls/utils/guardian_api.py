@@ -1,6 +1,7 @@
 import os
 import requests
-from django.http import JsonResponse
+from django.utils import timezone
+from polls.models import Article
 
 def fetch_articles(request):
     guardian_api_key = os.getenv('GUARDIAN_API_KEY')
@@ -14,14 +15,29 @@ def fetch_articles(request):
         data = response.json()
 
         articles = data['response']['results']
-        formatted_data = [
-            {"headline": article['fields']['headline'],
-             "trailText": article['fields']['trailText'],
-             "body": article['fields']['body']}
-            for article in articles
-            if article.get('type') != 'liveblog' and
-               not article.get('webTitle', '').startswith('Morning Mail:') # filter unwanted article types
-        ]
+        formatted_data = []
+        for article in articles:
+            if (article.get('type') != 'liveblog' and 
+                not article.get('webTitle', '').startswith('Morning Mail:') and 
+                not article.get('webTitle', '').startswith('Afternoon Update:')):
+                # Create an Article (db) instance and populate fields
+                new_article = Article(
+                    web_url=article['webUrl'],
+                    headline=article['fields']['headline'],
+                    trail_text=article['fields']['trailText'],
+                    body=article['fields']['body'],
+                    date=timezone.now(),
+                    summary='',  # Initialize summary as empty
+                    question='',  # Initialize question as empty
+                )
+                new_article.save()
+                formatted_data.append({
+                    "web_url": new_article.web_url,
+                    "headline": new_article.headline,
+                    "trail_text": new_article.trail_text,
+                    "body": new_article.body,
+                })
+
         return formatted_data
 
     except requests.RequestException as e:
@@ -30,4 +46,3 @@ def fetch_articles(request):
     except ValueError as e:
         print(f"JSON decoding error: {e}")
         return []
-    
