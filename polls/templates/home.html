@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1 class="mb-5 quattrocento-bold">PubTest</h1>
+<h1 class="mb-5 rye-regular">PUBTEST</h1>
 
 {% for temp in temps %}
 <div class="card mb-4" style="width: 32rem;">
@@ -10,8 +10,8 @@
     </div>
     <div class="card-body px-5 pt-4 pb-4">
         <h3 class="mb-4">{{ temp.question }}</h3>
-        <a href="#" class="btn btn-light me-3 quattrocento-bold response-no">No</a>
-        <a href="#" class="btn btn-light quattrocento-bold response-yes">Yes</a>
+        <a href="#" class="btn btn-light me-3 rye-regular response-no">No</a>
+        <a href="#" class="btn btn-light ms-2 rye-regular response-yes">Yes</a>
         <p class="mt-4">{{ temp.summary }}<br>
             <a href="#" class="card-link text-muted">Read the article</a>
         </p>

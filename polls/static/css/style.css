@@ -38,3 +38,9 @@ footer.page-footer {
     font-size: 1.8rem;
     color: #0091EA;
 }
+
+.rye-regular {
+    font-family: "Rye", serif;
+    font-weight: 400;
+    font-style: normal;
+  }  
