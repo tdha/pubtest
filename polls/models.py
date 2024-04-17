@@ -13,8 +13,8 @@ class Article(models.Model):
     trail_text = models.TextField()
     body = models.TextField()
     date = models.DateField(default=date.today)
-    summary = models.TextField()
-    question = models.TextField()
+    summary = models.TextField(blank=True)
+    question = models.TextField(blank=True)
     # answers = models.CharField(
     #     max_length=1,
     #     choices=ANSWERS,
