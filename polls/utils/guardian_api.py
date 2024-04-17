@@ -30,3 +30,4 @@ def fetch_articles(request):
     except ValueError as e:
         print(f"JSON decoding error: {e}")
         return []
+    

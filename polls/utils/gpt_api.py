@@ -46,3 +46,4 @@ def generate_questions(article_data):
     except Exception as e:
         print(f"An error occurred while generating the question: {e}")
         return "I couldn't generate a question."
+    
