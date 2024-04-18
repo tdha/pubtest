@@ -12,3 +12,6 @@ class Article(models.Model):
 
     def __str__(self):
         return f"{self.id}: {self.headline}"
+    
+    class Meta:
+        ordering = ['-id']

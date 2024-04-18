@@ -3,6 +3,9 @@ from openai import OpenAI
 from dotenv import load_dotenv
 from django.utils import timezone
 from polls.models import Article
+import time
+import json
+import re
 
 load_dotenv("pubtest/.env")
 
@@ -29,13 +32,16 @@ def ask_chatgpt(question):
 def generate_questions(article_id, headline, trail_text, body):
     formatted_prompt = (
         "You are a sociologist working to improve public policy. You are interested in the public opinion on current newsworthy topics.\n\n"
-        "Write a one line summary of the provided article (do not prefix i.e. remove 'summary'; do not use periods mid-sentence; always end the sentence with a full stop), then write a yes/no question (do not prefix i.e. remove 'question') that, once presented to the general population, will result in insightful demographic data.\n\n"
+        
+        "Write a one line summary of the provided article (do not prefix i.e. remove 'summary'). Then write a yes/no question (do not prefix i.e. remove 'question') that, once presented to the general population, will result in insightful demographic data.\n\n"
+
         "News article below:\n\n"
         f"Headline: {headline}\n"
         f"Trail Text: {trail_text}\n"
         f"Body: {body}"
     )
     try:
+        time.sleep(5)
         # Request the OpenAI API to generate a question
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
@@ -43,10 +49,19 @@ def generate_questions(article_id, headline, trail_text, body):
                 {"role": "system", "content": formatted_prompt}
             ]
         )
+
+        print(response)
+
         # Extract the first and second sentences
-        sentences = response.choices[0].message.content.split('.')
-        summary = sentences[0].strip()
-        question = sentences[1].strip()
+        sentences = re.split(r'\n\n|\n', response.choices[0].message.content)
+        sentences = [sentence.strip() for sentence in sentences if sentence.strip()]
+
+        summary = sentences[0]
+
+        if len(sentences) >= 2:
+            question = sentences[1]
+        else:
+            question = "" 
 
         return summary, question
     
