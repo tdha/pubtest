@@ -3,6 +3,7 @@ from openai import OpenAI
 from dotenv import load_dotenv
 from django.utils import timezone
 from polls.models import Article
+from django.db import IntegrityError
 import time
 import json
 import re
@@ -35,6 +36,8 @@ def generate_questions(article_id, headline, trail_text, body):
         
         "Write a one line summary of the provided article (do not prefix i.e. remove 'summary'). Then write a yes/no question (do not prefix i.e. remove 'question') that, once presented to the general population, will result in insightful demographic data.\n\n"
 
+        "Important! The result must be two sentences.\n\n"
+
         "News article below:\n\n"
         f"Headline: {headline}\n"
         f"Trail Text: {trail_text}\n"
@@ -53,7 +56,7 @@ def generate_questions(article_id, headline, trail_text, body):
         print(response)
 
         # Extract the first and second sentences
-        sentences = re.split(r'\n\n|\n', response.choices[0].message.content)
+        sentences = re.split(r'\n\n|\n|;', response.choices[0].message.content)
         sentences = [sentence.strip() for sentence in sentences if sentence.strip()]
 
         summary = sentences[0]
@@ -80,8 +83,8 @@ def save_generated_question(article_id, summary, question):
         
         # Save the changes to the database
         article.save()
-        
         return True
+    
     except Article.DoesNotExist:
         print("Article not found.")
         return False

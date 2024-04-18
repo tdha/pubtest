@@ -3,11 +3,6 @@ from .utils.guardian_api import fetch_articles
 from .utils.gpt_api import generate_questions
 from .models import Article
 
-# temps = [
-#     {'summary':'A 16-year-old boy allegedly stabbed a bishop and others during a church service in Sydney, leading to a riot and violence towards police and paramedics', 'question':'Should public figures like Bishop Mar Mari Emmanuel be more cautious when discussing sensitive religious topics to prevent incidents like the Sydney church stabbing?'},
-#     {'question':'Six people were killed and 12 others injured in a mass stabbing at a shopping centre in Sydney.', 'question':'Should mental health support and resources be increased in communities to prevent similar tragic incidents from happening in the future?'},
-# ]
-
 def home(request):
     articles = Article.objects.all()
     context = {
@@ -22,9 +17,13 @@ def about(request):
     return render(request, 'about.html')
 
 def polls(request):
-    articles = fetch_articles(request) 
-    if not articles: 
-        return render(request, 'polls.html', {'questions': ['No articles found.']})
-    
-    questions = [generate_questions(article) for article in articles]  
-    return render(request, 'polls.html', {'questions': questions})
+    articles = fetch_articles(request)
+    if not articles:
+        return render(request, 'polls.html', {'articles': [{'headline': 'No articles found.', 'trail_text': '', 'web_url': '#'}]})
+
+    # Creating a list of dictionaries for each article, extracting web_url, headline, and trail_text
+    article_data = [
+        {'web_url': article.get('web_url', '#'), 'headline': article.get('headline', 'No headline available'), 'trail_text': article.get('trail_text', 'No trail text available')}
+        for article in articles
+    ]
+    return render(request, 'polls.html', {'articles': article_data})

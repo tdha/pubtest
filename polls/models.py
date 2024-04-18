@@ -2,7 +2,7 @@ from django.db import models
 from datetime import date
 
 class Article(models.Model):
-    web_url = models.CharField(max_length=255)
+    web_url = models.CharField(max_length=255, unique=True)
     headline = models.TextField()
     trail_text = models.TextField()
     body = models.TextField()

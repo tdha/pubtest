@@ -6,10 +6,15 @@
     <title>Polls</title>
 </head>
 <body>
-    <h1>Poll Questions</h1>
+    <h1>Articles queried.</h1>
     <ul>
-        {% for question in questions %}
-            <li>{{ question }}</li>
+        {% for article in articles %}
+            <li>
+                <strong>Headline:</strong> {{ article.headline }}<br>
+                <strong>Summary:</strong> {{ article.trail_text }}<br>
+                <strong>Read more:</strong> <a href="{{ article.web_url }}">Link</a>
+                <hr>
+            </li>
         {% endfor %}
     </ul>
 </body>
