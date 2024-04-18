@@ -17,18 +17,6 @@ footer.page-footer {
     margin: 0 auto;
 }
 
-.quattrocento-regular {
-    font-family: "Quattrocento", serif;
-    font-weight: 400;
-    font-style: normal;
-}
-
-.quattrocento-bold {
-    font-family: "Quattrocento", serif;
-    font-weight: 700;
-    font-style: normal;
-  }
-
 .response-no {
     font-size: 1.8rem;
     color: #E91E63;
@@ -43,4 +31,15 @@ footer.page-footer {
     font-family: "Rye", serif;
     font-weight: 400;
     font-style: normal;
-  }  
+}
+
+@media (max-width: 767px) {
+    .card {
+        max-width: 100%;
+    }
+
+    .card-body {
+        padding-left: 24px !important;
+        padding-right: 24px !important;
+    }
+}
