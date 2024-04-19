@@ -28,20 +28,20 @@ GENDER_CHOICES = (
 )
 
 
-class Article(models.Model):
-    web_url = models.CharField(max_length=255, unique=True)
-    headline = models.TextField()
-    trail_text = models.TextField()
-    body = models.TextField()
-    date = models.DateField(default=timezone.now().date)
-    summary = models.TextField(blank=True)
-    question = models.TextField(blank=True)
+# class Article(models.Model):
+#     web_url = models.CharField(max_length=255, unique=True)
+#     headline = models.TextField()
+#     trail_text = models.TextField()
+#     body = models.TextField()
+#     date = models.DateField(default=lambda: timezone.now().date()) 
+#     summary = models.TextField(blank=True)
+#     question = models.TextField(blank=True)
 
-    def __str__(self):
-        return f"{self.id}: {self.headline}"
+#     def __str__(self):
+#         return f"{self.id}: {self.headline}"
     
-    class Meta:
-        ordering = ['-id']
+#     class Meta:
+#         ordering = ['-id']
 
 
 # class Response(models.Model):
