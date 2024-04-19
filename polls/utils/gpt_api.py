@@ -56,7 +56,7 @@ def generate_questions(article_id, headline, trail_text, body):
         print(response)
 
         # Extract the first and second sentences
-        sentences = re.split(r'\n\n|\n|;', response.choices[0].message.content)
+        sentences = re.split(r'\n\n|\n', response.choices[0].message.content)
         sentences = [sentence.strip() for sentence in sentences if sentence.strip()]
 
         summary = sentences[0]
