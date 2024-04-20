@@ -37,14 +37,6 @@ def fetch_articles(request):
                     summary='',  # Initialize summary as empty
                     question='',  # Initialize question as empty
                 )
-                # try:
-                #     new_article.save()
-                #     # Pass the required arguments when calling generate_questions()
-                #     article_id = new_article.id
-                #     summary, question = generate_questions(article_id, new_article.headline, new_article.trail_text, new_article.body)
-                #     save_generated_question(article_id, summary, question)
-                # except IntegrityError:
-                #     print(f"Article with web_url {new_article.web_url} already exists. Skipping.")
 
                 try:
                     # Check if the article with the same web_url already exists in the database

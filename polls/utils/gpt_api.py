@@ -34,7 +34,7 @@ def generate_questions(article_id, headline, trail_text, body):
     formatted_prompt = (
         "You are a sociologist working to improve public policy. You are interested in the public opinion on current newsworthy topics.\n\n"
         
-        "Write a one line summary of the provided article (do not prefix i.e. remove 'summary'). Then write a yes/no question (do not prefix i.e. remove 'question') that, once presented to the general population, will result in insightful demographic data.\n\n"
+        "Write a one line summary of the provided article (do not prefix i.e. remove 'summary' and end with a full stop.). Then write a yes/no question (do not prefix i.e. remove 'question') that, once presented to the general population, will result in insightful demographic data.\n\n"
 
         "Important! The result must be two sentences.\n\n"
 
