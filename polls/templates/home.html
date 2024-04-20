@@ -17,16 +17,21 @@
             </div>
             <div class="card-body px-5 pt-4 pb-4">
                 <h3 class="mb-4">{{ article.question }}</h3>
-                <a href="#" class="btn btn-light me-3 rye-regular response-no">No</a>
-                <a href="#" class="btn btn-light ms-2 rye-regular response-yes">Yes</a>
+                <a href="#" class="btn btn-light me-3 rye-regular response-no" data-article-id="{{ article.id }}">No</a>
+                <a href="#" class="btn btn-light ms-2 rye-regular response-yes" data-article-id="{{ article.id }}">Yes</a>
                 <p class="mt-4">{{ article.summary }}<br>
                     <a href="{{ article.web_url }}" target="_blank" class="card-link text-muted">Read the article</a>
                 </p>
-
+                <p class="mt-2 response-message" style="display: none;">You have voted.</p>
             </div>
         </div>
     </div>
 </div>
 {% endfor %}
+
+<script>
+    // click event listener on "yes/no" buttons
+    
+</script>
 
 {% endblock %}

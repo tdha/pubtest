@@ -7,4 +7,5 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('polls/', index, name='polls_index'),
     path('fetch-articles/', polls, name='fetch_polls'),
+    path('accounts/signup/', views.signup, name='signup'),
 ]

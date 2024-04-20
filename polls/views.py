@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .utils.guardian_api import fetch_articles
 from .utils.gpt_api import generate_questions
 from .models import Article
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
 
 def home(request):
     articles = Article.objects.all()
@@ -27,3 +29,17 @@ def polls(request):
         for article in articles
     ]
     return render(request, 'polls.html', {'articles': article_data})
+
+def signup(request):
+    error_message = ''
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST) # 'user' form that includes data from the browser
+        if form.is_valid():
+            user = form.save()
+            login(request, user) # logs in the user
+            return redirect('index')
+        else:
+            error_message = "Unable to sign up. Please try again."
+    form = UserCreationForm()
+    context = { 'form': form, 'error_message': error_message }
+    return render(request, 'registration/signup.html', context)
