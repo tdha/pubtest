@@ -1,15 +1,15 @@
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, HttpResponse
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.views.decorators.http import require_POST, require_http_methods
-from django.views.decorators.csrf import csrf_exempt
-from .models import Article, Response
+from django.views.decorators.http import require_http_methods
+from .forms import ProfileForm
+from .models import Article, Response, Profile
 from .utils.guardian_api import fetch_articles
 
-from django.http import HttpResponse, HttpResponseNotFound
 import logging
+
 logger = logging.getLogger(__name__)
 
 def home(request):
@@ -54,7 +54,6 @@ def signup(request):
 
 @login_required
 @require_http_methods(["GET", "POST"])
-# @csrf_exempt
 def vote(request):
     if request.method == 'POST':
         article_id = request.POST.get('article_id') 
@@ -74,3 +73,23 @@ def vote(request):
     
     else: 
         return HttpResponse('GET request received.')
+
+@login_required
+def profile(request):
+    try: 
+        profile = Profile.objects.get(user=request.user) # check if user already has a profile
+    except Profile.DoesNotExist:
+        profile = None
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=profile) # pass instance to updated existing profile
+        if form.is_valid():
+            profile = form.save(commit=False) # creates 'Profile' object (not saved to db)
+            profile.user = request.user # set user field as current user
+            profile.save()
+            return redirect('home')
+    
+    else:
+        form = ProfileForm(instance=profile) # if profile exists, populate form with existing profile data
+    
+    return render(request, 'profile.html', { 'form': form }) # renders web page
