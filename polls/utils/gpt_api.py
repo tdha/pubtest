@@ -36,7 +36,7 @@ def generate_questions(article_id, headline, trail_text, body):
         
         "Write a one line summary of the provided article (do not prefix i.e. remove 'summary' and end with a full stop.). Then write a yes/no question (do not prefix i.e. remove 'question') that, once presented to the general population, will result in insightful demographic data.\n\n"
 
-        "Important! The result must be two sentences.\n\n"
+        "Important! The result must be two sentences. Separate the sentences with '\n'.\n\n"
 
         "News article below:\n\n"
         f"Headline: {headline}\n"
@@ -57,7 +57,7 @@ def generate_questions(article_id, headline, trail_text, body):
 
         # Extract the first and second sentences
         sentences = re.split(r'\n\n|\n', response.choices[0].message.content)
-        sentences = [sentence.strip() for sentence in sentences if sentence.strip()]
+        sentences = [sentence.strip(",; '\"") for sentence in sentences if sentence.strip()]
 
         summary = sentences[0]
 

@@ -1,10 +1,9 @@
 from django.contrib.auth import login
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
-from .forms import ProfileForm, CustomAuthenticationForm
+from .forms import ProfileForm, CustomLoginForm, CustomSignupForm
 from .models import Article, Response, Profile
 from .utils.guardian_api import fetch_articles
 
@@ -38,17 +37,17 @@ def polls(request):
     ]
     return render(request, 'polls.html', {'articles': article_data})
 
-def signup(request):
+def user_signup(request):
     error_message = ''
     if request.method == 'POST':
-        form = UserCreationForm(request.POST) # 'user' form that includes data from the browser
+        form = CustomSignupForm(request.POST) # 'user' form that includes data from the browser
         if form.is_valid():
             user = form.save()
             login(request, user) # logs in the user
             return redirect('home')
         else:
             error_message = "Unable to sign up. Please try again."
-    form = UserCreationForm()
+    form = CustomSignupForm()
     context = { 'form': form, 'error_message': error_message }
     return render(request, 'registration/signup.html', context)
 
@@ -56,14 +55,14 @@ def signup(request):
 def user_login(request):
     error_message = ''
     if request.method == 'POST':
-        form = CustomAuthenticationForm(request, data=request.POST)
+        form = CustomLoginForm(request, data=request.POST)
         if form.is_valid():
             login(request, form.get_user())
             return redirect('home')
         else:
             error_message = "Invalid username or password. Please try again."
     else:
-        form = CustomAuthenticationForm()
+        form = CustomLoginForm()
 
     return render(request, 'registration/login.html', {'form': form, 'error_message': error_message})
 
