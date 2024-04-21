@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
-from .forms import ProfileForm
+from .forms import ProfileForm, CustomAuthenticationForm
 from .models import Article, Response, Profile
 from .utils.guardian_api import fetch_articles
 
@@ -52,6 +52,22 @@ def signup(request):
     context = { 'form': form, 'error_message': error_message }
     return render(request, 'registration/signup.html', context)
 
+
+def user_login(request):
+    error_message = ''
+    if request.method == 'POST':
+        form = CustomAuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            login(request, form.get_user())
+            return redirect('home')
+        else:
+            error_message = "Invalid username or password. Please try again."
+    else:
+        form = CustomAuthenticationForm()
+
+    return render(request, 'registration/login.html', {'form': form, 'error_message': error_message})
+
+
 @login_required
 @require_http_methods(["GET", "POST"])
 def vote(request):
@@ -73,6 +89,7 @@ def vote(request):
     
     else: 
         return HttpResponse('GET request received.')
+
 
 @login_required
 def profile(request):

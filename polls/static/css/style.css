@@ -15,6 +15,7 @@ footer.page-footer {
 
 h1 {
     letter-spacing: -2px;
+    color: #263238;
 }
 
 .center {
@@ -38,7 +39,7 @@ h1 {
   }
   
 .vote-message {
-    color: #FF5722;
+    color: #1976D2;
 }
 
 #logout-form {

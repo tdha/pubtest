@@ -4,12 +4,14 @@
 <div class="row mx-2">
     <div class="offset-lg-3 col-lg-6">
         <h1 class="mb-5 bungee-regular">Profile</h1>
-        
-        <form method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button class="btn btn-dark" type="submit">Save profile</button>
-        </form>
+
+        <div class="form-floating mb-3">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn btn-dark" type="submit">Save profile</button>
+            </form>
+        </div>
 
     </div>
 </div>
