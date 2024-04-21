@@ -17,19 +17,27 @@
             </div>
             <div class="card-body px-5 pt-4 pb-4">
                 <h3 class="mb-4">{{ article.question }}</h3>
-                {% if user.is_authenticated %}
-                <a href="#" class="btn btn-light me-3 bungee-regular response-no" data-article-id="{{ article.id }}">No</a>
-                <a href="#" class="btn btn-light ms-2 bungee-regular response-yes"
-                    data-article-id="{{ article.id }}">Yes</a>
-                {% else %}
-                <button class="btn btn-light me-3 bungee-regular response-no" disabled>No</button>
-                <button class="btn btn-light ms-2 bungee-regular response-yes" disabled>Yes</button>
-                <p class="mt-3 vote-message" id="login-message" style="display: block;">→ Log in to vote</p>
-                {% endif %}
-                <p class="mt-4">{{ article.summary }}<br>
-                    <a href="{{ article.web_url }}" target="_blank" class="card-link text-muted">Read the article</a>
-                </p>
-                <p class="mt-2 response-message" style="display: none;">You have voted.</p>
+                <div>
+                    {% if user.is_authenticated %}
+                        {% if article.user_voted_yes %}
+                            <p class="mt-2 response-message-yes">You have voted YES</p>
+                        {% elif article.user_voted_no %}
+                            <p class="mt-2 response-message-no">You have voted NO</p>
+                        {% else %}
+                            <button class="btn btn-light me-3 bungee-regular response-no"
+                                    data-article-id="{{ article.id }}">No</button>
+                            <button class="btn btn-light ms-2 bungee-regular response-yes"
+                                    data-article-id="{{ article.id }}">Yes</button>
+                        {% endif %}
+                        <p class="mt-2 response-message" style="display: none;"></p>
+                        {% else %}
+                        <button class="btn btn-light me-3 bungee-regular response-no" disabled>No</button>
+                        <button class="btn btn-light ms-2 bungee-regular response-yes" disabled>Yes</button>
+                        <p class="mt-3 vote-message" id="login-message" style="display: block;">→ Log in to vote</p>
+                    {% endif %}
+                </div>
+                <p class="mt-4 mb-0">{{ article.summary }}</p>
+                <a href="{{ article.web_url }}" target="_blank" class="card-link text-muted">Read the article</a>
             </div>
         </div>
     </div>
@@ -37,7 +45,6 @@
 {% endfor %}
 
 <script>
-
     // Event listener for 'Yes' button
     document.querySelectorAll('.response-yes').forEach(button => {
         button.addEventListener('click', function (event) {
@@ -49,7 +56,9 @@
             recordResponse(articleId, answer);
 
             // hide both button and show response message
-            const responseMessage = this.parentElement.querySelector('.response-message');
+            const responseMessage = this.parentElement.parentElement.querySelector('.response-message');
+            responseMessage.textContent = 'You have voted YES';
+            responseMessage.style.color = "#1976D2";
             const buttons = this.parentElement.querySelectorAll('.response-yes, .response-no');
             buttons.forEach(button => button.style.display = 'none');
             responseMessage.style.display = 'block';
@@ -67,13 +76,14 @@
             recordResponse(articleId, answer);
 
             // hide both button and show response message
-            const responseMessage = this.parentElement.querySelector('.response-message');
+            const responseMessage = this.parentElement.parentElement.querySelector('.response-message');
+            responseMessage.textContent = 'You have voted NO';
+            responseMessage.style.color = "#E91E63";
             const buttons = this.parentElement.querySelectorAll('.response-yes, .response-no');
             buttons.forEach(button => button.style.display = 'none');
             responseMessage.style.display = 'block';
         });
     });
-
 
     function recordResponse(articleId, answer) {
         fetch('/vote/', {
@@ -103,7 +113,6 @@
         const parts = value.split(`; ${name}=`);
         if (parts.length === 2) return parts.pop().split(';').shift();
     }
-
 </script>
 
 {% endblock %}

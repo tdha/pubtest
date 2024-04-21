@@ -1,5 +1,7 @@
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.db import models
+from django.db.models import Case, When, BooleanField
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
@@ -11,18 +13,41 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+# def home(request):
+#     articles = Article.objects.all()
+
+#     if request.user.is_authenticated: # if user is authenticated, annotate each article with user's response
+
+#         # conditional expression to annotate each article with user's response
+#         yes_response = Case(When(response__user=request.user, response__answer='yes', then=True), default=False, output_field=models.BooleanField())
+#         no_response = Case(When(response__user=request.user, response__answer='no', then=True), default=False, output_field=models.BooleanField())
+
+#         # annotate each article with user's response
+#         article = articles.annotate(user_voted_yes=yes_response, user_voted_no=no_response)
+
+#     context = { 'articles': articles }
+#     return render(request, 'home.html', context)
+
 def home(request):
     articles = Article.objects.all()
-    context = {
-        'articles': articles
-    }
+
+    if request.user.is_authenticated: 
+        yes_response = Case(When(response__user=request.user, response__answer='yes', then=True), default=False, output_field=BooleanField())
+        no_response = Case(When(response__user=request.user, response__answer='no', then=True), default=False, output_field=BooleanField())
+
+        articles = articles.annotate(user_voted_yes=yes_response, user_voted_no=no_response)
+
+    context = {'articles': articles}
     return render(request, 'home.html', context)
+
 
 def index(request):
     return render(request, 'polls_index.html')
 
+
 def about(request):
     return render(request, 'about.html')
+
 
 @login_required
 def polls(request):
@@ -36,6 +61,7 @@ def polls(request):
         for article in articles
     ]
     return render(request, 'polls.html', {'articles': article_data})
+
 
 def user_signup(request):
     error_message = ''
@@ -67,26 +93,44 @@ def user_login(request):
     return render(request, 'registration/login.html', {'form': form, 'error_message': error_message})
 
 
+# @login_required
+# @require_http_methods(["GET", "POST"])
+# def vote(request):
+#     if request.method == 'POST':
+#         article_id = request.POST.get('article_id') 
+#         answer = request.POST.get('answer')
+
+#         # Check if the article_id exists in the database
+#         try:
+#             article = Article.objects.get(pk=article_id)
+#         except Article.DoesNotExist:
+#             return HttpResponse('Article does not exist', status=404)
+
+#         # Create a new response object and save it to the database
+#         response = Response.objects.create(answer=answer, user=request.user, article=article)
+
+#         # Redirect the user to the home page after voting
+#         return redirect('home')
+    
+#     else: 
+#         return HttpResponse('GET request received.')
+
 @login_required
-@require_http_methods(["GET", "POST"])
 def vote(request):
     if request.method == 'POST':
         article_id = request.POST.get('article_id') 
         answer = request.POST.get('answer')
 
-        # Check if the article_id exists in the database
         try:
             article = Article.objects.get(pk=article_id)
         except Article.DoesNotExist:
             return HttpResponse('Article does not exist', status=404)
 
-        # Create a new response object and save it to the database
-        response = Response.objects.create(answer=answer, user=request.user, article=article)
+        response, created = Response.objects.update_or_create(user=request.user, article=article, defaults={'answer': answer})
 
-        # Redirect the user to the home page after voting
         return redirect('home')
     
-    else: 
+    elif request.method == 'GET':
         return HttpResponse('GET request received.')
 
 
