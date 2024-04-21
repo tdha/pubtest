@@ -33,6 +33,10 @@ footer.page-footer {
     font-style: normal;
 }
 
+.vote-message {
+    color: #FF5722;
+}
+
 #logout-form {
     display: inline;
 }

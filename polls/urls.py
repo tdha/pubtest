@@ -8,4 +8,5 @@ urlpatterns = [
     path('polls/', index, name='polls_index'),
     path('fetch-articles/', polls, name='fetch_polls'),
     path('accounts/signup/', views.signup, name='signup'),
+    path('vote/', views.vote, name='vote'),
 ]

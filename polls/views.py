@@ -1,9 +1,15 @@
-from django.shortcuts import render, redirect
-from .utils.guardian_api import fetch_articles
-from .utils.gpt_api import generate_questions
-from .models import Article
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.views.decorators.http import require_POST, require_http_methods
+from .models import Article, Response
+from .utils.guardian_api import fetch_articles
+
+from django.http import HttpResponse, HttpResponseNotFound
+import logging
+logger = logging.getLogger(__name__)
 
 def home(request):
     articles = Article.objects.all()
@@ -43,3 +49,28 @@ def signup(request):
     form = UserCreationForm()
     context = { 'form': form, 'error_message': error_message }
     return render(request, 'registration/signup.html', context)
+
+@login_required
+@require_http_methods(["GET", "POST"])
+def vote(request):
+    if request.method == 'POST':
+        article_id = request.POST.get('article_id') 
+        answer = request.POST.get('answer')
+
+        print(article_id)
+        print(answer)
+
+        # Check if the article_id exists in the database
+        try:
+            article = Article.objects.get(pk=article_id)
+        except Article.DoesNotExist:
+            return HttpResponse('Article does not exist', status=404)
+
+        # Create a new response object and save it to the database
+        response = Response.objects.create(answer=answer, user=request.user, article=article)
+
+        # Redirect the user to the home page after voting
+        return redirect('home')
+    
+    else: 
+        return HttpResponse('GET request received.')
