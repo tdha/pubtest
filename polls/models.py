@@ -51,7 +51,7 @@ class Response(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.answer}: {self.article.id}"
+        return f"{self.article.id} - {self.user.username}: {self.answer}"
 
 
 class Profile(models.Model):
