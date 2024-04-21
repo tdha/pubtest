@@ -1,9 +1,10 @@
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST, require_http_methods
+from django.views.decorators.csrf import csrf_exempt
 from .models import Article, Response
 from .utils.guardian_api import fetch_articles
 
@@ -52,6 +53,7 @@ def signup(request):
 
 @login_required
 @require_http_methods(["GET", "POST"])
+# @csrf_exempt
 def vote(request):
     if request.method == 'POST':
         article_id = request.POST.get('article_id') 
