@@ -25,6 +25,7 @@ def index(request):
 def about(request):
     return render(request, 'about.html')
 
+@login_required
 def polls(request):
     articles = fetch_articles(request)
     if not articles:
@@ -44,7 +45,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             login(request, user) # logs in the user
-            return redirect('index')
+            return redirect('home')
         else:
             error_message = "Unable to sign up. Please try again."
     form = UserCreationForm()
@@ -58,9 +59,6 @@ def vote(request):
     if request.method == 'POST':
         article_id = request.POST.get('article_id') 
         answer = request.POST.get('answer')
-
-        print(article_id)
-        print(answer)
 
         # Check if the article_id exists in the database
         try:

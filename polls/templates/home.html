@@ -37,25 +37,6 @@
 {% endfor %}
 
 <script>
-    // // click event listener on "yes/no" buttons
-    // document.querySelectorAll('.response-yes, .response-no').forEach(button => {
-    //     button.addEventListener('click', function(event) {
-    //         event.preventDefault();
-    //         const articleId = this.getAttribute('data-article-id');
-    //         const answer = this.classList.contains('response-yes') ? 'yes' : 'no';
-
-    //         console.log('Article ID:', articleId); // debugging
-
-    //         // send AJAX request to record response
-    //         recordResponse(articleId, answer);
-
-    //         // hide both button and show response message
-    //         const responseMessage = this.parentElement.querySelector('.response-message');
-    //         const buttons = this.parentElement.querySelectorAll('.response-yes, .response-no');
-    //         buttons.forEach(button => button.style.display = 'none');
-    //         responseMessage.style.display = 'block';
-    //     });
-    // });
 
     // Event listener for 'Yes' button
     document.querySelectorAll('.response-yes').forEach(button => {
@@ -63,8 +44,6 @@
             event.preventDefault();
             const articleId = this.getAttribute('data-article-id');
             const answer = 'yes';
-
-            console.log('Article ID:', articleId); // debugging
 
             // send AJAX request to record response
             recordResponse(articleId, answer);
@@ -83,8 +62,6 @@
             event.preventDefault();
             const articleId = this.getAttribute('data-article-id');
             const answer = 'no';
-
-            console.log('Article ID:', articleId); // debugging
 
             // send AJAX request to record response
             recordResponse(articleId, answer);
