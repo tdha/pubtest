@@ -24,11 +24,11 @@ News data is collected from [The Guardian](https://open-platform.theguardian.com
 
 This data is then added to a prompt that is fed into [Open AI](https://platform.openai.com/docs/overview)'s ChatGPT. The result is a one-sentence summary of the news article and yes/no question. This mimics the stages of a casual conversation:
 
-"Do you agree with **this**?"
--- "YES / NO"
--- "_I don't know much about it_" (provide a quick overview → summary)
-  |-- "Ah, YES / NO"
-  |-- "_I think there's more to it_" (a deeper conversation → article)
+"Do you agree with **this**?"\
+-- "YES / NO"\
+-- "_I don't know much about it_" (provide a quick overview → summary)\
+  |-- "Ah, YES / NO"\
+  |-- "_I think there's more to it_" (a deeper conversation → article)\
     |--"Ah, YES / NO"
 
 Results of each question are also provided.
