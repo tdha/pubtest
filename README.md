@@ -20,9 +20,16 @@ PubTest's hypotheses:
 
 PubTest utilises two APIs to generate the yes/no questions.
 
-News data is collected from [The Guardian](https://open-platform.theguardian.com/documentation/) (AU), firstly because is free and secondly, the documentation is good. In keeping with the Australian theme, the articles are from the *Australian-News* section.
+News data is collected from [The Guardian](https://open-platform.theguardian.com/documentation/) (AU), firstly because it is free and secondly, the documentation is good. In keeping with the Australian theme, the articles are from the *Australian-News* section.
 
-This data is then included into a prompt that is feed into [Open AI](https://platform.openai.com/docs/overview)'s ChatGPT. The result is a summary of the news article and yes/no question.
+This data is then added to a prompt that is fed into [Open AI](https://platform.openai.com/docs/overview)'s ChatGPT. The result is a one-sentence summary of the news article and yes/no question. This mimics the stages of a casual conversation:
+
+"Do you agree with **this**?"
+-- "YES / NO"
+-- "_I don't know much about it_" (provide a quick overview → summary)
+  |-- "Ah, YES / NO"
+  |-- "_I think there's more to it_" (a deeper conversation → article)
+    |--"Ah, YES / NO"
 
 Results of each question are also provided.
 
