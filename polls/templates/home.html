@@ -13,7 +13,7 @@
         <div class="card mb-4" style="width: 32rem;">
             <div class="card-header px-0 d-flex">
                 <strong class="ms-5 me-2">#{{ article.id }}</strong> <em class="flex-grow-1">{{ article.date }}</em> <a
-                    class="me-5 text-muted" href="#">Results</a>
+                    class="me-5 text-muted" href="{% url 'results' article.id %}">Results</a>
             </div>
             <div class="card-body px-5 pt-4 pb-4">
                 <h3 class="mb-4">{{ article.question }}</h3>

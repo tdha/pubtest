@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1 class="mb-5 bungee-regular">Results</h1>
+<h2>{{ article.question }}</h2>
+<p>{{ article.summary }}</p>
+<a href="{{ article.web_url }}">Read the article</a>
+<hr>
+<p>Total Votes: {{ total_votes }}</p>
+<p>Yes Votes: {{ yes_votes }}</p>
+<p>No Votes: {{ no_votes }}</p>
+
+
+{% endblock %}

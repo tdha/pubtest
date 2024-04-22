@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import models
 from django.db.models import Case, When, BooleanField
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_http_methods
 from .forms import ProfileForm, CustomLoginForm, CustomSignupForm
 from .models import Article, Response, Profile
@@ -92,29 +92,6 @@ def user_login(request):
 
     return render(request, 'registration/login.html', {'form': form, 'error_message': error_message})
 
-
-# @login_required
-# @require_http_methods(["GET", "POST"])
-# def vote(request):
-#     if request.method == 'POST':
-#         article_id = request.POST.get('article_id') 
-#         answer = request.POST.get('answer')
-
-#         # Check if the article_id exists in the database
-#         try:
-#             article = Article.objects.get(pk=article_id)
-#         except Article.DoesNotExist:
-#             return HttpResponse('Article does not exist', status=404)
-
-#         # Create a new response object and save it to the database
-#         response = Response.objects.create(answer=answer, user=request.user, article=article)
-
-#         # Redirect the user to the home page after voting
-#         return redirect('home')
-    
-#     else: 
-#         return HttpResponse('GET request received.')
-
 @login_required
 def vote(request):
     if request.method == 'POST':
@@ -153,3 +130,19 @@ def profile(request):
         form = ProfileForm(instance=profile) # if profile exists, populate form with existing profile data
     
     return render(request, 'profile.html', { 'form': form }) # renders web page
+
+
+@login_required
+def results(request, article_id):
+    article = get_object_or_404(Article, pk=article_id)
+    responses = Response.objects.filter(article=article)
+    total_votes = responses.count()
+    yes_votes = responses.filter(answer='yes').count()
+    no_votes = responses.filter(answer='no').count()
+    
+    return render(request, 'results.html', {
+        'article': article,
+        'total_votes': total_votes,
+        'yes_votes': yes_votes,
+        'no_votes': no_votes
+    })
