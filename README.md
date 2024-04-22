@@ -14,7 +14,7 @@ PubTest's hypotheses:
 
 - While there is nuance and complexity to every discussion, an opinion is inherently for or against (as seen in referendums).
 - The app is focused on big data (i.e. no personally-identifiying data), and that anonymity will allow for more honest voting.
-- Paired with question, a summary and a news article are provided for context. This caters for various cognitive types i.e. impulsive vs thoughtful thinkers.
+- Paired with question, a summary and a news article are provided for context. This caters for various cognitive types i.e. quick vs thoughtful thinkers.
 
 ## Features
 
@@ -22,7 +22,7 @@ PubTest utilises two APIs to generate the yes/no questions.
 
 News data is collected from [The Guardian](https://open-platform.theguardian.com/documentation/) (AU), firstly because is free and secondly, the documentation is good. In keeping with the Australian theme, the articles are from the *Australian-News* section.
 
-This data is then included into a prompt that is feed into Open AI's ChatGPT. The result is a summary of the news article and yes/no question.
+This data is then included into a prompt that is feed into [Open AI](https://platform.openai.com/docs/overview)'s ChatGPT. The result is a summary of the news article and yes/no question.
 
 Results of each question are also provided.
 
@@ -36,6 +36,7 @@ Results of each question are also provided.
 ## Roadmap
 
 - Data visualisation of results – pyramid plot demographic variables against yes/no.
+- Result access based on information provided e.g. provide _year of birth_ allows user to view votes split up by age.
 - A second view that separates articles that have been voted on.
 - Notification for when votes reach a certain threshold. 
 - Automate the question-generation request.
