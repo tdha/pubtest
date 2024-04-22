@@ -4,13 +4,21 @@
 <div class="row mx-2">
     <div class="offset-lg-3 col-lg-6">
         <h1 class="mb-5 bungee-regular">Results</h1>
+        <p>← <a class="text-muted" href="/">Back</a></p>
+
         <h3 class="mb-4">{{ article.question }}</h3>
         <p class="mb-0">{{ article.summary }}</p>
-        <a href="{{ article.web_url }}">Read the article</a>
+        <a class="text-muted" href="{{ article.web_url }}">Read the article</a>
         <hr class="my-4">
-        <h6 class="mb-0">Total Votes: {{ total_votes }}</h6>
-        <p class="response-message-yes mb-0">YES: {{ yes_votes }}</p>
-        <p class="response-message-no">NO: {{ no_votes }}</p>
+
+        <h5 class="mb-2">Total Votes: {{ total_votes }}</h5>
+        <p class="response-message-yes mb-0 victor-mono-500">YES: {{ yes_votes }}</p>
+        <p class="response-message-no victor-mono-500">NO: {{ no_votes }}</p>
+    </div>
+    <div class="offset-lg-3 col-lg-6">
+        {% for age, age_votes in age_group_votes.items %}
+        <p class="victor-mono-500 mb-0">Age:{{ age }} <span class="response-message-yes">YES:{{ age_votes.yes_votes }}</span> <span class="response-message-no">NO:{{ age_votes.no_votes }}</span></p>
+        {% endfor %}
     </div>
 </div>
 

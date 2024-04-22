@@ -1,9 +1,12 @@
+from collections import defaultdict
+from datetime import datetime
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.db import models
 from django.db.models import Case, When, BooleanField
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
 from django.views.decorators.http import require_http_methods
 from .forms import ProfileForm, CustomLoginForm, CustomSignupForm
 from .models import Article, Response, Profile
@@ -121,6 +124,30 @@ def profile(request):
 def results(request, article_id):
     article = get_object_or_404(Article, pk=article_id)
     responses = Response.objects.filter(article=article)
+
+    current_year = datetime.now().year # get current year
+    age_group_votes = {}
+
+    for response in responses:
+        user = response.user
+        try:
+            profile = Profile.objects.get(user=user)
+            if profile.birth_year:
+                user_age = current_year - profile.birth_year
+                age_group_votes[user_age] = { 'yes_votes': 0, 'no_votes': 0} # initialise age group in dictionary if it doesn't exist
+                    
+                if response.answer == 'yes':
+                    age_group_votes[user_age]['yes_votes'] += 1
+                elif response.answer == 'no':
+                    age_group_votes[user_age]['no_votes'] += 1
+            else:
+                print(f"Birth year not specified for user { user.username }.") # handle case where birth year not set
+
+        except Profile.DoesNotExist:
+            print(f"No profile found for user { user.username }.") # handle case where profile does not exist
+
+    sorted_age_group_votes = dict(sorted(age_group_votes.items())) # sort age ascending order
+
     total_votes = responses.count()
     yes_votes = responses.filter(answer='yes').count()
     no_votes = responses.filter(answer='no').count()
@@ -129,5 +156,6 @@ def results(request, article_id):
         'article': article,
         'total_votes': total_votes,
         'yes_votes': yes_votes,
-        'no_votes': no_votes
+        'no_votes': no_votes,
+        'age_group_votes': sorted_age_group_votes,
     })

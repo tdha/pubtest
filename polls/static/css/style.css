@@ -37,7 +37,14 @@ h1 {
     font-weight: 400;
     font-style: normal;
   }
-  
+ 
+.victor-mono-500 {
+    font-family: "Victor Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+}  
+
 .vote-message {
     color: #1976D2;
 }
