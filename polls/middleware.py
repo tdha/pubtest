@@ -25,4 +25,5 @@ class JsonMiddleware:
                 querydict.update(data)
                 # set either request.GET or request.POST
                 setattr(request, request.method, querydict)
+        
         return self.get_response(request)
