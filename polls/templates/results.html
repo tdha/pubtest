@@ -9,15 +9,16 @@
         <h3 class="mb-4">{{ article.question }}</h3>
         <p class="mb-0">{{ article.summary }}</p>
         <a class="text-muted" href="{{ article.web_url }}">Read the article</a>
-        <hr class="my-4">
+        <hr class="mt-4 mb-5">
 
-        <h5 class="mb-2">Total Votes: {{ total_votes }}</h5>
-        <p class="response-message-yes mb-0 victor-mono-500">YES: {{ yes_votes }}</p>
-        <p class="response-message-no victor-mono-500">NO: {{ no_votes }}</p>
+        <h5 class="mb-2 victor-mono-700">TOTAL {{ total_votes }}</h5>
+        <p class="response-message-yes mb-0 victor-mono-500">YES {{ yes_votes }}</p>
+        <p class="response-message-no victor-mono-500">&nbsp;NO {{ no_votes }}</p>
     </div>
-    <div class="offset-lg-3 col-lg-6">
+    <div class="offset-lg-3 col-lg-6 mt-3">
+        <h6 class="mb-2 victor-mono-700">AGE</h6>
         {% for age, age_votes in age_group_votes.items %}
-        <p class="victor-mono-500 mb-0">Age:{{ age }} <span class="response-message-yes">YES:{{ age_votes.yes_votes }}</span> <span class="response-message-no">NO:{{ age_votes.no_votes }}</span></p>
+        <p class="victor-mono-500 mb-0">{{ age }}&nbsp;&nbsp;<span class="response-message-yes">YES {{ age_votes.yes_votes }}</span>&nbsp;&nbsp;<span class="response-message-no">NO {{ age_votes.no_votes }}</span></p>
         {% endfor %}
     </div>
 </div>
