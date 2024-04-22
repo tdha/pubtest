@@ -27,9 +27,9 @@ This data is then added to a prompt that is fed into [Open AI](https://platform.
 "Do you agree with **this**?"\
 -- "YES / NO"\
 -- "_I don't know much about it_" (provide a quick overview → summary)\
-&ensp;|-- "Ah, YES / NO"\
-&ensp;|-- "_I think there's more to it_" (a deeper conversation → article)\
-&emsp;|--"Ah, YES / NO"
+&ensp;&ensp;|-- "Ah, YES / NO"\
+&ensp;&ensp;|-- "_I think there's more to it_" (a deeper conversation → article)\
+&ensp;&ensp;&ensp;&ensp;|--"Ah, YES / NO"
 
 Results of each question are also provided.
 
