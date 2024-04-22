@@ -1,14 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1 class="mb-5 bungee-regular">Results</h1>
-<h2>{{ article.question }}</h2>
-<p>{{ article.summary }}</p>
-<a href="{{ article.web_url }}">Read the article</a>
-<hr>
-<p>Total Votes: {{ total_votes }}</p>
-<p>Yes Votes: {{ yes_votes }}</p>
-<p>No Votes: {{ no_votes }}</p>
-
+<div class="row mx-2">
+    <div class="offset-lg-3 col-lg-6">
+        <h1 class="mb-5 bungee-regular">Results</h1>
+        <h3 class="mb-4">{{ article.question }}</h3>
+        <p class="mb-0">{{ article.summary }}</p>
+        <a href="{{ article.web_url }}">Read the article</a>
+        <hr class="my-4">
+        <p>Total Votes: {{ total_votes }}</p>
+        <p>Yes Votes: {{ yes_votes }}</p>
+        <p>No Votes: {{ no_votes }}</p>
+    </div>
+</div>
 
 {% endblock %}

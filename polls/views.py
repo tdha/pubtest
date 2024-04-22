@@ -13,21 +13,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# def home(request):
-#     articles = Article.objects.all()
-
-#     if request.user.is_authenticated: # if user is authenticated, annotate each article with user's response
-
-#         # conditional expression to annotate each article with user's response
-#         yes_response = Case(When(response__user=request.user, response__answer='yes', then=True), default=False, output_field=models.BooleanField())
-#         no_response = Case(When(response__user=request.user, response__answer='no', then=True), default=False, output_field=models.BooleanField())
-
-#         # annotate each article with user's response
-#         article = articles.annotate(user_voted_yes=yes_response, user_voted_no=no_response)
-
-#     context = { 'articles': articles }
-#     return render(request, 'home.html', context)
-
 def home(request):
     articles = Article.objects.all()
 
