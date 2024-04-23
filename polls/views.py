@@ -19,11 +19,14 @@ logger = logging.getLogger(__name__)
 def home(request):
     articles = Article.objects.all()
 
+    print(len(articles))
+
     if request.user.is_authenticated: 
         yes_response = Case(When(response__user=request.user, response__answer='yes', then=True), default=False, output_field=BooleanField())
         no_response = Case(When(response__user=request.user, response__answer='no', then=True), default=False, output_field=BooleanField())
 
-        articles = articles.annotate(user_voted_yes=yes_response, user_voted_no=no_response)
+        articles = articles.distinct('id').annotate(user_voted_yes=yes_response, user_voted_no=no_response)
+        print(len(articles))
 
     context = {'articles': articles}
     return render(request, 'home.html', context)
@@ -120,33 +123,36 @@ def profile(request):
     return render(request, 'profile.html', { 'form': form }) # renders web page
 
 
+
 @login_required
 def results(request, article_id):
     article = get_object_or_404(Article, pk=article_id)
     responses = Response.objects.filter(article=article)
 
-    current_year = datetime.now().year # get current year
+    current_year = datetime.now().year
     age_group_votes = {}
+    display_age_data = False  # Flag to control display of age data
 
-    for response in responses:
-        user = response.user
-        try:
-            profile = Profile.objects.get(user=user)
-            if profile.birth_year:
-                user_age = current_year - profile.birth_year
-                age_group_votes[user_age] = { 'yes_votes': 0, 'no_votes': 0} # initialise age group in dictionary if it doesn't exist
-                    
-                if response.answer == 'yes':
-                    age_group_votes[user_age]['yes_votes'] += 1
-                elif response.answer == 'no':
-                    age_group_votes[user_age]['no_votes'] += 1
-            else:
-                print(f"Birth year not specified for user { user.username }.") # handle case where birth year not set
+    user_profile = Profile.objects.filter(user=request.user).first()
+    if user_profile and user_profile.birth_year:
+        display_age_data = True
+        for response in responses:
+            user = response.user
+            try:
+                profile = Profile.objects.get(user=user)
+                if profile.birth_year:
+                    user_age = current_year - profile.birth_year
+                    if user_age not in age_group_votes:
+                        age_group_votes[user_age] = {'yes_votes': 0, 'no_votes': 0}
 
-        except Profile.DoesNotExist:
-            print(f"No profile found for user { user.username }.") # handle case where profile does not exist
+                    if response.answer == 'yes':
+                        age_group_votes[user_age]['yes_votes'] += 1
+                    elif response.answer == 'no':
+                        age_group_votes[user_age]['no_votes'] += 1
+            except Profile.DoesNotExist:
+                print(f"No profile found for user {user.username}.")
 
-    sorted_age_group_votes = dict(sorted(age_group_votes.items())) # sort age ascending order
+    sorted_age_group_votes = dict(sorted(age_group_votes.items()))
 
     total_votes = responses.count()
     yes_votes = responses.filter(answer='yes').count()
@@ -158,4 +164,6 @@ def results(request, article_id):
         'yes_votes': yes_votes,
         'no_votes': no_votes,
         'age_group_votes': sorted_age_group_votes,
+        'display_age_data': display_age_data  # Pass the flag to the template
     })
+

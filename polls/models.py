@@ -40,6 +40,12 @@ class Article(models.Model):
     def __str__(self):
         return f"{self.id}: {self.headline}"
     
+    def voted_yes(self, user):
+        return self.response_set.filter(user=user, answer='yes')
+
+    def voted_no(self, user):
+        return self.response_set.filter(user=user, answer='no')
+    
     class Meta:
         ordering = ['-id']
 

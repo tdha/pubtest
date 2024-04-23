@@ -14,7 +14,7 @@ PubTest's hypotheses:
 
 - While there is nuance and complexity to every discussion, an opinion is inherently for or against (as seen in referendums).
 - The app is focused on big data (i.e. no personally-identifiying data), and that anonymity will allow for more honest voting.
-- Paired with question, a summary and a news article are provided for context. This caters for various cognitive types i.e. quick vs thoughtful thinkers.
+- Paired with the question, a summary and a news article are provided for context. This caters for various cognitive types i.e. quick vs thoughtful thinkers.
 
 ## Features
 
